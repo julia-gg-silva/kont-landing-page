@@ -20,6 +20,7 @@ async function initializeApp() {
     ]);
     setupScrollReveal();
     initGlow();
+    setupContactForm();
 
     if (window.location.hash) {
         const target = document.querySelector(window.location.hash);
@@ -84,10 +85,43 @@ function initGlow() {
     function loop() {
         bX += (mX - bX) * 0.08;
         bY += (mY - bY) * 0.08;
-        // O transform move a div sem criar espaço no layout
         glow.style.transform = `translate3d(${bX}px, ${bY}px, 0)`;
         requestAnimationFrame(loop);
     }
     loop();
+}
+function setupContactForm() {
+    const form = document.getElementById('contact-form');
+    
+    if (!form) return; 
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const btn = document.getElementById('btn-submit');
+        const originalText = btn.innerText;
+        btn.innerText = 'Enviando...';
+        btn.disabled = true;
+
+        const templateParams = {
+            name: document.getElementById('from_name').value,
+            email: document.getElementById('user_email').value,
+            phone: document.getElementById('user_phone').value,
+            message: document.getElementById('user_message').value,
+            time: new Date().toLocaleString('pt-BR')
+        };
+
+        emailjs.send('service_ry08y5v', 'template_82pkbeh', templateParams)
+            .then(function() {
+                alert('Menssagem enviada! Entraremos em contato em breve.');
+                form.reset();
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }, function(error) {
+                alert('FALHA AO ENVIAR: ' + JSON.stringify(error));
+                btn.innerText = originalText;
+                btn.disabled = false;
+            });
+    });
 }
 initializeApp();

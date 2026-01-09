@@ -10,7 +10,17 @@
     transform: translateY(0);
 }
 
-/* Delays para as camadas */
 .delay-200 { transition-delay: 200ms; }
 .delay-400 { transition-delay: 400ms; }
 .delay-500 { transition-delay: 500ms; }
+
+.whatsapp-btn {
+    background-color: #25d366 !important;
+    transition: all 0.3s ease !important;
+}
+
+.whatsapp-btn:hover {
+    background-color: #128c7e !important;
+    transform: scale(1.1); 
+}
+

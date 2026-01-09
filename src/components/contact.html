@@ -4,7 +4,8 @@
     </div>
     <div class="-mt-[5rem] grid grid-cols-2 gap-[5rem] ml-[7.5rem] mr-[5rem]">
         <div class="flex flex-col gap-10">
-            <h2 class="reveal delay-200 text-5xl text-[#FFFF] font-stara font-semibold">Bora fazer sua marca se movimentar do jeito
+            <h2 class="reveal delay-200 text-5xl text-[#FFFF] font-stara font-semibold">Bora fazer sua marca se
+                movimentar do jeito
                 certo?</h2>
             <p class="reveal delay-300 text-white/90 text-2xl">
                 Deixa seus dados aqui, e<br> marcamos
@@ -37,56 +38,45 @@
         </div>
 
         <div>
-            <form class="reveal delay-400 flex flex-col gap-2 max-w-[32rem] text-[#FFFF] ">
-                <div class=" flex flex-col gap-5">
-                    <label class="text-white/60 text-sm tracking-wide">
-                        Nome
-                    </label>
-                    <input class="w-full bg-transparent border-b border-white
-                   text-white placeholder-white/50 focus:outline-none" />
+            <form id="contact-form" class="reveal delay-400 flex flex-col gap-8 max-w-[32rem] text-[#FFFF]">
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-white/60 text-sm tracking-wide">Nome</label>
+                    <input type="text" name="name" id="from_name" required
+                        class="w-full bg-transparent border-b border-white text-white placeholder-white/50 focus:outline-none pb-2" />
                 </div>
 
-                <div class="flex flex-col gap-5">
-                    <label class="text-white/60 text-sm tracking-wide">
-                        Número
-                    </label>
-
-                    <input type="tel" class="w-full bg-transparent border-b border-white
-               text-white focus:outline-none" inputmode="numeric" oninput="
-          let v = this.value.replace(/\D/g,'').slice(0,11);
-          let r = '';
-          if (v.length >= 1) r = '(' + v.slice(0,2);
-          if (v.length >= 3) r += ') ' + v.slice(2,3);
-          if (v.length >= 4) r += ' ' + v.slice(3,7);
-          if (v.length >= 8) r += '-' + v.slice(7,11);
-          this.value = r;
-        " />
+                <div class="flex flex-col gap-2">
+                    <label class="text-white/60 text-sm tracking-wide">Número</label>
+                    <input type="tel" name="phone" id="user_phone" required
+                        class="w-full bg-transparent border-b border-white text-white focus:outline-none pb-2"
+                        inputmode="numeric" oninput="
+                        let v = this.value.replace(/\D/g,'').slice(0,11);
+                        let r = '';
+                        if (v.length >= 1) r = '(' + v.slice(0,2);
+                        if (v.length >= 3) r += ') ' + v.slice(2,7);
+                        if (v.length >= 8) r += '-' + v.slice(7,11);
+                        this.value = r;
+                    " />
                 </div>
 
-
-                <div class="flex flex-col gap-5">
-                    <label class="text-white/60 text-sm tracking-wide">
-                        E-mail
-                    </label>
-                    <input type="email" class="w-full bg-transparent border-b border-white
-                   text-white placeholder-white/50 focus:outline-none" />
+                <div class="flex flex-col gap-2">
+                    <label class="text-white/60 text-sm tracking-wide">E-mail</label>
+                    <input type="email" name="email" id="user_email" required
+                        class="w-full bg-transparent border-b border-white text-white placeholder-white/50 focus:outline-none pb-2" />
                 </div>
 
-                <div>
-                    <label class="text-white/60 text-sm tracking-wide pb-5">
-                        Quer saber mais? Fala com a gente!
-                    </label>
-                    <textarea rows="4" class="w-full bg-transparent border-b border-white
-                   text-white placeholder-white/50 resize-none focus:outline-none"></textarea>
+                <div class="flex flex-col gap-2">
+                    <label class="text-white/60 text-sm tracking-wide">Quer saber mais? Fala com a gente!</label>
+                    <textarea rows="4" name="message" id="user_message" required
+                        class="w-full bg-transparent border-b border-white text-white placeholder-white/50 resize-none focus:outline-none"></textarea>
                 </div>
 
-                <button
-                    class=" text-sm rounded-2xl bg-white px-4 py-1 text-black w-fit hover:bg-black hover:text-white transition">
+                <button type="submit" id="btn-submit"
+                    class="text-sm rounded-2xl bg-white px-8 py-2 text-black w-fit hover:bg-zinc-800 hover:text-white transition-all duration-300 mt-4">
                     Enviar
                 </button>
             </form>
-
         </div>
-
     </div>
 </section>
