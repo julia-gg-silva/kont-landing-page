@@ -12,4 +12,5 @@ loadSection('header', 'src/components/header.html');
 loadSection('about', 'src/components/about.html');
 loadSection('team', 'src/components/team.html');
 loadSection('services', 'src/components/services.html');
-// loadSection('contact', 'src/components/contact.html');
+loadSection('contact', 'src/components/contact.html');
+loadSection('footer', 'src/components/footer.html');
