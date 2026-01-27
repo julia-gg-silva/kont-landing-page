@@ -21,6 +21,7 @@ async function initializeApp() {
     setupScrollReveal();
     initGlow();
     setupContactForm();
+    setupMobileMenu();
 
     if (window.location.hash) {
         const target = document.querySelector(window.location.hash);
@@ -122,6 +123,33 @@ function setupContactForm() {
                 btn.innerText = originalText;
                 btn.disabled = false;
             });
+    });
+}
+
+function setupMobileMenu() {
+    const btn = document.getElementById('menu-btn');
+    const closeBtn = document.getElementById('close-btn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const links = document.querySelectorAll('.mobile-link');
+
+    if (!btn || !sidebar) return;
+
+    function toggleMenu() {
+        sidebar.classList.toggle('translate-x-full');
+        overlay.classList.toggle('opacity-0');
+        overlay.classList.toggle('pointer-events-none');
+        // Trava o scroll do body quando menu abre
+        document.body.style.overflow = sidebar.classList.contains('translate-x-full') ? '' : 'hidden';
+    }
+
+    btn.addEventListener('click', toggleMenu);
+    closeBtn.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+
+    // Fecha a sidebar ao clicar em um link
+    links.forEach(link => {
+        link.addEventListener('click', toggleMenu);
     });
 }
 initializeApp();
