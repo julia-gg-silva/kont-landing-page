@@ -12,6 +12,7 @@ async function loadSection(id, path) {
 async function initializeApp() {
     await Promise.all([
         loadSection('header', 'src/components/header.html'),
+        loadSection('video', 'src/components/video.html'),
         loadSection('about', 'src/components/about.html'),
         loadSection('team', 'src/components/team.html'),
         loadSection('services', 'src/components/services.html'),
