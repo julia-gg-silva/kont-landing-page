@@ -43,12 +43,12 @@ Foi implementada uma solução robusta para o gerenciamento de vídeos em alta r
 ### Instalação Local
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+    git clone [https://github.com/julia-gg-silva/kont-landing-page.git](https://github.com/julia-gg-silva/kont-landing-page.git)
     ```
 
 2.  **Acesse o diretório:**
     ```bash
-    cd seu-repositorio
+    cd kont-landing-page
     ```
 
 3.  **Execute via servidor local:**
