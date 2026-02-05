@@ -4,8 +4,30 @@ async function loadSection(id, path) {
         if (!response.ok) throw new Error(`Erro ao carregar componente: ${path}`);
         const html = await response.text();
         document.getElementById(id).innerHTML = html;
+        
+        if (id === 'video') {
+            handleVideoAutoplay();
+        }
     } catch (error) {
         console.error(`Erro na seção [${id}]:`, error);
+    }
+}
+
+function handleVideoAutoplay() {
+    const video = document.querySelector('#video video');
+    if (video) {
+        const promise = video.play();
+        if (promise !== undefined) {
+            promise.catch(() => {
+                const playOnInteraction = () => {
+                    video.play();
+                    document.removeEventListener('touchstart', playOnInteraction);
+                    document.removeEventListener('click', playOnInteraction);
+                };
+                document.addEventListener('touchstart', playOnInteraction);
+                document.addEventListener('click', playOnInteraction);
+            });
+        }
     }
 }
 
@@ -36,23 +58,18 @@ async function initializeApp() {
 
 document.addEventListener('click', (event) => {
     const anchor = event.target.closest('a[href^="#"]');
-
     if (anchor) {
         const targetId = anchor.getAttribute('href');
         const targetElement = document.querySelector(targetId);
-
         if (targetElement) {
             event.preventDefault();
-
             const offset = 100;
             const elementPosition = targetElement.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - offset;
-
             window.scrollTo({
                 top: offsetPosition,
                 behavior: 'smooth'
             });
-
             window.history.pushState(null, null, targetId);
         }
     }
@@ -66,24 +83,17 @@ function setupScrollReveal() {
             }
         });
     }, { threshold: 0.1 });
-
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 }
 
 function initGlow() {
     const glow = document.getElementById('mouse-glow');
-    if (!glow) {
-        console.error("Não achei o mouse-glow");
-        return;
-    }
-
+    if (!glow) return;
     let mX = -1000, mY = -1000, bX = -1000, bY = -1000;
-    
     window.addEventListener('mousemove', (e) => {
         mX = e.clientX;
         mY = e.clientY;
     });
-
     function loop() {
         bX += (mX - bX) * 0.08;
         bY += (mY - bY) * 0.08;
@@ -92,19 +102,16 @@ function initGlow() {
     }
     loop();
 }
+
 function setupContactForm() {
     const form = document.getElementById('contact-form');
-    
     if (!form) return; 
-
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-
         const btn = document.getElementById('btn-submit');
         const originalText = btn.innerText;
         btn.innerText = 'Enviando...';
         btn.disabled = true;
-
         const templateParams = {
             name: document.getElementById('from_name').value,
             email: document.getElementById('user_email').value,
@@ -112,10 +119,9 @@ function setupContactForm() {
             message: document.getElementById('user_message').value,
             time: new Date().toLocaleString('pt-BR')
         };
-
         emailjs.send('service_3pmhe5r', 'template_o250d9m', templateParams)
             .then(function() {
-                alert('Menssagem enviada! Entraremos em contato em breve.');
+                alert('Mensagem enviada! Entraremos em contato em breve.');
                 form.reset();
                 btn.innerText = originalText;
                 btn.disabled = false;
@@ -133,22 +139,17 @@ function setupMobileMenu() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
     const links = document.querySelectorAll('.mobile-link');
-
     if (!btn || !sidebar) return;
-
     function toggleMenu() {
         sidebar.classList.toggle('translate-x-full');
         overlay.classList.toggle('opacity-0');
         overlay.classList.toggle('pointer-events-none');
         document.body.style.overflow = sidebar.classList.contains('translate-x-full') ? '' : 'hidden';
     }
-
     btn.addEventListener('click', toggleMenu);
-    closeBtn.addEventListener('click', toggleMenu);
-    overlay.addEventListener('click', toggleMenu);
-
-    links.forEach(link => {
-        link.addEventListener('click', toggleMenu);
-    });
+    if (closeBtn) closeBtn.addEventListener('click', toggleMenu);
+    if (overlay) overlay.addEventListener('click', toggleMenu);
+    links.forEach(link => link.addEventListener('click', toggleMenu));
 }
+
 initializeApp();
