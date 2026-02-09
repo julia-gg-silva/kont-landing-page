@@ -5,6 +5,10 @@ async function loadSection(id, path) {
         const html = await response.text();
         document.getElementById(id).innerHTML = html;
         
+        if (id === 'header') {
+            setupMobileMenu();
+        }
+        
         if (id === 'video') {
             handleVideoAutoplay();
         }
@@ -16,6 +20,7 @@ async function loadSection(id, path) {
 function handleVideoAutoplay() {
     const video = document.querySelector('#video video');
     if (video) {
+        video.muted = true;
         const promise = video.play();
         if (promise !== undefined) {
             promise.catch(() => {
@@ -24,7 +29,7 @@ function handleVideoAutoplay() {
                     document.removeEventListener('touchstart', playOnInteraction);
                     document.removeEventListener('click', playOnInteraction);
                 };
-                document.addEventListener('touchstart', playOnInteraction);
+                document.addEventListener('touchstart', playOnInteraction, { passive: true });
                 document.addEventListener('click', playOnInteraction);
             });
         }
@@ -41,17 +46,20 @@ async function initializeApp() {
         loadSection('contact', 'src/components/contact.html'),
         loadSection('footer', 'src/components/footer.html')
     ]);
+
     setupScrollReveal();
     initGlow();
     setupContactForm();
-    setupMobileMenu();
 
     if (window.location.hash) {
         const target = document.querySelector(window.location.hash);
         if (target) {
             setTimeout(() => {
-                target.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
+                const offset = 100;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+                window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            }, 500);
         }
     }
 }
@@ -60,12 +68,15 @@ document.addEventListener('click', (event) => {
     const anchor = event.target.closest('a[href^="#"]');
     if (anchor) {
         const targetId = anchor.getAttribute('href');
+        if (targetId === '#') return;
+        
         const targetElement = document.querySelector(targetId);
         if (targetElement) {
             event.preventDefault();
             const offset = 100;
             const elementPosition = targetElement.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - offset;
+            
             window.scrollTo({
                 top: offsetPosition,
                 behavior: 'smooth'
@@ -112,6 +123,7 @@ function setupContactForm() {
         const originalText = btn.innerText;
         btn.innerText = 'Enviando...';
         btn.disabled = true;
+
         const templateParams = {
             name: document.getElementById('from_name').value,
             email: document.getElementById('user_email').value,
@@ -119,6 +131,7 @@ function setupContactForm() {
             message: document.getElementById('user_message').value,
             time: new Date().toLocaleString('pt-BR')
         };
+
         emailjs.send('service_3pmhe5r', 'template_o250d9m', templateParams)
             .then(function() {
                 alert('Mensagem enviada! Entraremos em contato em breve.');
@@ -135,21 +148,24 @@ function setupContactForm() {
 
 function setupMobileMenu() {
     const btn = document.getElementById('menu-btn');
-    const closeBtn = document.getElementById('close-btn');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
+    const closeBtn = document.getElementById('close-btn');
     const links = document.querySelectorAll('.mobile-link');
+
     if (!btn || !sidebar) return;
+
     function toggleMenu() {
         sidebar.classList.toggle('translate-x-full');
         overlay.classList.toggle('opacity-0');
         overlay.classList.toggle('pointer-events-none');
         document.body.style.overflow = sidebar.classList.contains('translate-x-full') ? '' : 'hidden';
     }
-    btn.addEventListener('click', toggleMenu);
-    if (closeBtn) closeBtn.addEventListener('click', toggleMenu);
-    if (overlay) overlay.addEventListener('click', toggleMenu);
-    links.forEach(link => link.addEventListener('click', toggleMenu));
+
+    btn.onclick = toggleMenu;
+    if (closeBtn) closeBtn.onclick = toggleMenu;
+    if (overlay) overlay.onclick = toggleMenu;
+    links.forEach(link => link.onclick = toggleMenu);
 }
 
 initializeApp();
